@@ -39,9 +39,6 @@ Host *
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
 EOF
-echo "================================================================"
-echo "Configuring /etc/hosts"
-echo "================================================================"
 cat << EOF >> /etc/hosts
 10.0.2.2	master1.ceph.cluster master1
 10.12.0.61      storage1.ceph.cluster storage1
@@ -52,27 +49,15 @@ cat << EOF >> /etc/hosts
 10.12.0.42      monitor2.ceph.cluster monitor2
 10.12.0.43      monitor3.ceph.cluster monitor3
 EOF
-echo "================================================================"
-echo "Creating storage1:osd1-4"
-echo "================================================================"
 for i in `seq 1 4`; do
                 ssh storage1 mkdir -p /var/local/osd$i;
         done
-echo "================================================================"
-echo "Creating storage2:osd5-8"
-echo "================================================================"
 for i in `seq 5 8`; do
                 ssh storage2 mkdir -p /var/local/osd$i;
         done
-echo "================================================================"
-echo "Creating storage3:osd9-12"
-echo "================================================================"
 for i in `seq 9 12`; do
                 ssh storage3 mkdir -p /var/local/osd$i;
         done
-echo "================================================================"
-echo "Creating storage4:osd13-16"
-echo "================================================================"
 for i in `seq 13 16`; do
                 ssh storage4 mkdir -p /var/local/osd$i;
         done
@@ -105,10 +90,8 @@ for i in `seq 13 16`; do
 	done
 ceph-deploy admin master1 storage1 storage2 storage3 storage4 monitor1 monitor2 monitor3
 sudo chmod +r /vagrant/ceph.client.admin.keyring
-echo "================================================================"
 echo "osd pool default size = 2" >> /vagrant/ceph.conf
 echo "osd pool default min size = 1" >> /vagrant/ceph.conf
 echo "osd pool default pg num = 256" >> /vagrant/ceph.conf
 echo "osd pool default pgp num = 256" >> /vagrant/ceph.conf
-echo "================================================================"
 ceph-deploy --overwrite-conf config push monitor1 monitor2 monitor3 storage1 storage2 storage3 storage4
